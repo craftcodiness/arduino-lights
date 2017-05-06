@@ -2,9 +2,9 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-> Tiny Ruby wrapper on serial-port to control ws8201 LED lights via Arduino
+> Tiny polyglot (Ruby/Python) wrapper on serial-port to control ws8201 LED lights via Arduino
 
-This Ruby library opens a serial port to communicate with an Arduino, allowing programs to send messages to a receiving process on the Arduino that controls ws8201-chipset LED strips. The Arduino must have been programmed with [@edwardmccaughan's](https://github.com/edwardmccaughan) [rgb_led_control](https://github.com/edwardmccaughan/rgb_led_control) firmware.
+This polyglot (Ruby/Python) library opens a serial port to communicate with an Arduino, allowing programs to send messages to a receiving process on the Arduino that controls ws8201-chipset LED strips. The Arduino must have been programmed with [@edwardmccaughan's](https://github.com/edwardmccaughan) [rgb_led_control](https://github.com/edwardmccaughan/rgb_led_control) firmware.
 
 Today, this supports two devices - the LED ring, and the LED matrix. Both have similar APIs, but the LED matrix requires an explicit `draw_screen` command to be sent after the pixel data has been updated before anything will be rendered.
 
@@ -12,6 +12,8 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
 
  - [Background](#background)
  - [Install](#install)
+   - [Install Ruby](#install-ruby)
+   - [Install Python](#install-python)
  - [Usage](#usage)
  - [API](#api)
    - [serial_port](#arduinolightsserial_port)
@@ -27,7 +29,9 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
 
 ## Install
 
-Add this gem to your Gemfile:
+### Install Ruby
+
+To install this library in Ruby, add this gem to your Gemfile:
 
 ```
 source "https://rubygems.org"
@@ -35,7 +39,37 @@ source "https://rubygems.org"
 gem "arduino-lights"
 ```
 
+If you are modifying this Gem, update the version information in `arduino-lights.gemspec` and build a new version using `gem`:
+
+```
+gem build arduino-lights.gemspec
+gem push arduino-lights-<VERSION>.gem
+```
+
+N.B. You will need an appropriate rubygems API key to be able to push the package.
+
+### Install Python
+
+To install this library in Python, fetch it from PyPI:
+
+```
+pip install arduino_lights
+```
+
+If you are modifying the library, update the version information and download URL in `setup.py` and push a new version with `setup.py`:
+
+```
+python setup.py sdist upload -r arduino_lights
+git tag <VERSION> -m "Your comment"
+git push --tags origin master
+
+```
+
+N.B. You will need appropriate entries in your `~/.pypirc`, including a valid username and password, to be able to push the package.
+
 ## Usage
+
+### Usage Ruby
 
 From your ruby script, simply import `arduino-lights`. You can then write simple code to drive the LEDs. For example, for the LED ring:
 
@@ -53,6 +87,32 @@ end
 ```
 
 Note that the LED ring does not explicitly require `ArduinoLights::draw_screen` to be called to render the pixles, but the LED matrix will do before any changes can be seen. 
+
+### Usage Python
+
+From your python script, simply import `ledutils` from the `arduino_lights` package:
+
+```
+import time
+from arduino_lights import ledutils
+
+ser = ledutils.serial_port()
+
+x = 0
+y = 0
+first = True
+while(True):
+  if not first:
+    ledutils.set_pixel(ser, x, y, 0, 0, 0)
+  first = False
+  x = (x + 1) % 12
+  if x == 0:
+    y = (y + 1) % 12
+  ledutils.set_pixel(ser, x, y, 0, 255, 0)
+  ledutils.end_frame(ser)
+  time.sleep(0.05)
+
+```
 
 ## API
 

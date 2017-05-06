@@ -1,3 +1,15 @@
+def serial_port():
+  ser = serial.Serial(
+    port='/dev/ttyUSB0',
+    baudrate=115200
+  )
+
+  # So! Apparently when you connect to the arduino serial port, the bootloader
+  # kicks in, resets the arduino and waits a second for a new program to be loaded
+  # before running the actual already stored code 
+  time.sleep(2)
+
+  return ser
 
 def set_pixel(ser, x, y, red, green, blue):
   red   = min(red, 253)
