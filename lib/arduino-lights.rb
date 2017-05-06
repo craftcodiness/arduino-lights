@@ -7,7 +7,7 @@ module ArduinoLights
 
   def self.serial_port
     @port ||= begin
-      res = SerialPort.new(SERIAL_PORT, baud: SERIAL_RATE, flow_control: SerialPort::SOFT)
+      res = SerialPort.new(SERIAL_PORT, SERIAL_RATE, 8, 1, SerialPort::NONE)
       sleep(2)
       res
     end
@@ -50,9 +50,9 @@ end
 if __FILE__ == $0
   pixel = 0
   while (true)
-    pixels = (0..(Arduino::PIXELS-1)).map { [0,0,0] }
+    pixels = (0..(ArduinoLights::PIXELS-1)).map { [0,0,0] }
     pixels[pixel] = [100,50,50]
-    Arduino::draw_pixel_map(pixels)
-    pixel = (pixel + 1) % Arduino::PIXELS
+    ArduinoLights::draw_pixel_map(pixels)
+    pixel = (pixel + 1) % ArduinoLights::PIXELS
   end
 end
