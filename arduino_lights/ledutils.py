@@ -1,3 +1,5 @@
+import serial
+
 def serial_port():
   ser = serial.Serial(
     port='/dev/ttyUSB0',
