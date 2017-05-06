@@ -12,6 +12,7 @@ BAUD_RATE = 115200
 
 
 def serial_port(file="/dev/ttyUSB0"):
+  file = os.getenv("BLEMU_DEVICE", file)
   if not os.path.exists(file):
     print "File " + file + " does not exist. Cannot open serial port"
     sys.exit(1)

@@ -21,6 +21,7 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
    - [draw_pixel_map](#draw_pixel_mappixels)
    - [end_frame](#end_frame)
  - [Simulator](#simulator)
+   - [Running blemu](#running-blemu)
  - [Maintainer](#maintainer)
  - [Contribute](#contribute)
  - [License](#license)
@@ -128,6 +129,12 @@ This function will open and return the serial port. By default, the serial port 
 
 For testing purposes, you can pass a path to a named pipe as the port address. In this case, bytes will be written to the pipe, and no attempt will be made to configure baud rate etc.
 
+The default serial port can also be overridden by setting the `BLEMU_DEVICE` environment variable:
+
+```
+export BLEMU_DEVICE=/dev/pts/7
+```
+
 ### set_pixel(pixel, red, green, blue)
 
 This will set the pixel with index `pixel` to the colour `#RRGGBB` where `red`, `green` and `blue` are numbers in the range 0 to 253 (values 254 and 255 are reserved as control codes - best avoid them).
@@ -142,7 +149,23 @@ This function sends the control code to render the current buffer to the screen 
 
 ## Simulator
 
-If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim). The instructions there explain how to render your output to a local named pipe rather than a serial port for testing purposes.
+If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim) (NCurses-based simulator written in Ruby) or [blemu](arduino_lights/blemu.py) (SDL-based simulator written in Python). 
+
+When running with either simulator, you may wish to set the `BLEMU_DEVICE` variable in your environment to connect you `arduino-lights` scripts to the simulator rather than the serial port:
+
+```
+export BLEMU_DEVICE=/dev/pty/7
+```  
+
+### Running blemu
+
+The `blemu` simulator is included in this repository and can be used to simulate rendering to real hardware. `blemu` depends on `python-pygame` which requires `SDL`. Once you have installed those dependencies, simply run:
+
+```
+python blemu.py
+```
+
+from the `arduino_lights` folder to start the simulator. The simulator will dynamically allocate a `PTY` device that can be used by your `arduino-lights` scripts to send LED data to the simulator. The `PTY` address will be printed to the console when the simulator starts.
 
 ## Maintainer
 

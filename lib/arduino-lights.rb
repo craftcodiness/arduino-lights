@@ -6,10 +6,11 @@ module ArduinoLights
   PIXELS = 24
 
   def self.serial_port(file = SERIAL_PORT)
+    file = ENV.fetch("BLEMU_DEVICE", file)
     @port ||= begin
       res = nil
       if File.chardev?(file)
-        res = SerialPort.new(SERIAL_PORT, SERIAL_RATE, 8, 1, SerialPort::NONE)
+        res = SerialPort.new(file, SERIAL_RATE, 8, 1, SerialPort::NONE)
       elsif File.pipe?(file)
         res = File.open(file, "w+")
       else
@@ -43,6 +44,11 @@ module ArduinoLights
     self.serial_port.flush()
   end
 
+  def self.end_frame()
+    self.serial_port.write(254.chr)
+    self.serial_port.flush()
+  end
+
   def self.radial_pixel_index(value, range)
     (((PIXELS.to_f * value) / range).floor + PIXELS) % PIXELS
   end
@@ -62,5 +68,6 @@ if __FILE__ == $0
     pixels[pixel] = [100,50,50]
     ArduinoLights::draw_pixel_map(pixels)
     pixel = (pixel + 1) % ArduinoLights::PIXELS
+    ArduinoLights::end_frame()
   end
 end
