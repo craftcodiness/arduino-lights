@@ -2,9 +2,9 @@
 
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-> Tiny polyglot (Ruby/Python) wrapper on serial-port to control ws8201 LED lights via Arduino
+> Tiny polyglot (Ruby/Python) wrapper on serial-port to control ws2801/ws2812 LED lights via Arduino
 
-This polyglot (Ruby/Python) library opens a serial port to communicate with an Arduino, allowing programs to send messages to a receiving process on the Arduino that controls ws8201-chipset LED strips. The Arduino must have been programmed with [@edwardmccaughan's](https://github.com/edwardmccaughan) [rgb_led_control](https://github.com/edwardmccaughan/rgb_led_control) firmware.
+This polyglot (Ruby/Python) library opens a serial port to communicate with an Arduino, allowing programs to send messages to a receiving process on the Arduino that controls ws2801- and ws2812-chipset LED strips. The Arduino must have been programmed with [@edwardmccaughan's](https://github.com/edwardmccaughan) [rgb_led_control](https://github.com/edwardmccaughan/rgb_led_control) firmware.
 
 Today, this supports two devices - the LED ring, and the LED matrix. Both have similar APIs, but the LED matrix requires an explicit `draw_screen` command to be sent after the pixel data has been updated before anything will be rendered.
 
@@ -12,24 +12,26 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
 
  - [Background](#background)
  - [Install](#install)
-   - [Install Ruby](#install-ruby)
-   - [Install Python](#install-python)
+   - [Ruby Install](#ruby-install)
+   - [Python Install](#python-install)
  - [Usage](#usage)
  - [API](#api)
-   - [serial_port](#arduinolightsserial_port)
-   - [set_pixel](#arduinolightsset_pixelpixel-red-green-blue)
-   - [draw_pixel_map](#arduinolightsdraw_pixel_mappixels)
+   - [serial_port](#serial_portportdevttyUSB0)
+   - [set_pixel](#set_pixelpixel-red-green-blue)
+   - [draw_pixel_map](#draw_pixel_mappixels)
+   - [end_frame](#end_frame)
+ - [Simulator](#simulator)
  - [Maintainer](#maintainer)
  - [Contribute](#contribute)
  - [License](#license)
 
 ## Background
 
-[Ed](https://github.com/edwardmccaughan) is a master of all things crafty. He builds strange and wonderful contraptions with his bare hands, then shares the contraptions with his friends so that they can create their own artistic wonders. This library is to support the development of crafty LED-driving code in Ruby.
+[Ed](https://github.com/edwardmccaughan) is a master of all things crafty. He builds strange and wonderful contraptions with his bare hands, then shares the contraptions with his friends so that they can create their own artistic wonders. This library is to support the development of crafty LED-driving code in Ruby and Python.
 
 ## Install
 
-### Install Ruby
+### Ruby Install
 
 To install this library in Ruby, add this gem to your Gemfile:
 
@@ -48,7 +50,7 @@ gem push arduino-lights-<VERSION>.gem
 
 N.B. You will need an appropriate rubygems API key to be able to push the package.
 
-### Install Python
+### Python Install
 
 To install this library in Python, fetch it from PyPI:
 
@@ -116,17 +118,31 @@ while(True):
 
 ## API
 
-### ArduinoLights::serial_port
+The APIs for Ruby and Python are similar. Note that for the Python library, the API calls' first argument must be a reference to the target serial port (the Ruby library maintains a singleton reference to the opened port).
 
-This function will open and return the serial port. By default, the serial port is expected to be at `/dev/ttyUSB0`. The port will be configured for 115200 baud (8N1). If you need different defaults, you're out of luck. It is not necessary to call this function directly - it will implicitly be called by the pixel drawing routines.
+The Ruby library will automatically open the serial port when the first pixel data needs to be sent. For the Python library, the serial port must be opened explicitly and a reference to the port retained for future API calls.
 
-### ArduinoLights::set_pixel(pixel, red, green, blue)
+### serial_port(port = '/dev/ttyUSB0')
+
+This function will open and return the serial port. By default, the serial port is expected to be at `/dev/ttyUSB0`. The port will be configured for 115200 baud (8N1). You can change the target port by passing the path as the argument to this function. For the Ruby library, it is not always necessary to call this function directly - it will implicitly be called by the pixel drawing routines with default values.
+
+For testing purposes, you can pass a path to a named pipe as the port address. In this case, bytes will be written to the pipe, and no attempt will be made to configure baud rate etc.
+
+### set_pixel(pixel, red, green, blue)
 
 This will set the pixel with index `pixel` to the colour `#RRGGBB` where `red`, `green` and `blue` are numbers in the range 0 to 253 (values 254 and 255 are reserved as control codes - best avoid them).
 
-### ArduinoLights::draw_pixel_map(pixels)
+### draw_pixel_map(pixels)
 
 This function takes an array of `[red, green, blue]` values - one for each pixel - and renders them to the device.
+
+### end_frame()
+
+This function sends the control code to render the current buffer to the screen for the WS2801-type displays
+
+## Simulator
+
+If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim). The instructions there explain how to render your output to a local named pipe rather than a serial port for testing purposes.
 
 ## Maintainer
 
