@@ -159,10 +159,10 @@ export BLEMU_DEVICE=/dev/pty/7
 
 ### Running blemu
 
-The `blemu` simulator is included in this repository and can be used to simulate rendering to real hardware. `blemu` depends on `python-pygame` which requires `SDL`. Once you have installed those dependencies, simply run:
+The `blemu` simulator is included in this repository and can be used to simulate rendering to real hardware. `blemu` depends on `python-pygame` which requires `SDL`. Once you have installed those dependencies and this library, simply run:
 
 ```
-python blemu.py
+python -m arduino_lights.blemu
 ```
 
 from the `arduino_lights` folder to start the simulator. The simulator will dynamically allocate a `PTY` device that can be used by your `arduino-lights` scripts to send LED data to the simulator. The `PTY` address will be printed to the console when the simulator starts.
