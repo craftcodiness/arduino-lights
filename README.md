@@ -6,7 +6,7 @@
 
 This polyglot (Ruby/Python) library opens a serial port to communicate with an Arduino, allowing programs to send messages to a receiving process on the Arduino that controls ws2801- and ws2812-chipset LED strips. The Arduino must have been programmed with [@edwardmccaughan's](https://github.com/edwardmccaughan) [rgb_led_control](https://github.com/edwardmccaughan/rgb_led_control) firmware.
 
-Today, this supports two devices - the LED ring, and the LED matrix. Both have similar APIs, but the LED matrix requires an explicit `draw_screen` command to be sent after the pixel data has been updated before anything will be rendered.
+Today, this supports two devices - the LED ring, and the LED matrix. Both have similar APIs, but the LED matrix requires an explicit `end_frame` command to be sent after the pixel data has been updated before anything will be rendered.
 
 ## Table of Contents
 
@@ -16,7 +16,7 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
    - [Python Install](#python-install)
  - [Usage](#usage)
  - [API](#api)
-   - [serial_port](#serial_portportdevttyUSB0)
+   - [serial_port](#serial_portport--devttyusb0)
    - [set_pixel](#set_pixelpixel-red-green-blue)
    - [draw_pixel_map](#draw_pixel_mappixels)
    - [end_frame](#end_frame)
