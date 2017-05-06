@@ -1,1 +1,4 @@
+**/*.pyc
 *.gem
+MANIFEST
+dist
