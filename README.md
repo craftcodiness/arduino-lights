@@ -184,4 +184,4 @@ Pull requests are more than welcome! We have very low standards.
 
 This code is licensed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl.txt), a [copy of which](LICENSE) is included in this repository.
 
-Copyright Arthur Taylor and Edward McCaughan, 2017
+Copyright Arthur Taylor, Edward McCaughan and Ezequiel Muns, 2017
