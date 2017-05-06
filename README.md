@@ -156,7 +156,7 @@ This function sends the control code to render the current buffer to the screen 
 
 If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim) (NCurses-based simulator written in Ruby) or [blemu](arduino_lights/blemu.py) (SDL-based simulator written in Python). 
 
-When running with either simulator, you may wish to set the `BLEMU_DEVICE` variable in your environment to connect you `arduino-lights` scripts to the simulator rather than the serial port:
+When running with either simulator, you may wish to set the `BLEMU_DEVICE` variable in your environment to connect your `arduino-lights` scripts to the simulator rather than the serial port:
 
 ```
 export BLEMU_DEVICE=/dev/pty/7
