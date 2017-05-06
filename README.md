@@ -14,9 +14,9 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
  - [Install](#install)
  - [Usage](#usage)
  - [API](#api)
-   - [serial_port](#serial-port)
-   - [set_pixel](#set-pixel)
-   - [draw_pixel_map](#draw-pixel-map)
+   - [serial_port](#arduinolightsserial_port)
+   - [set_pixel](#arduinolightsset_pixelpixel-red-green-blue)
+   - [draw_pixel_map](#arduinolightsdraw_pixel_mappixels)
  - [Maintainer](#maintainer)
  - [Contribute](#contribute)
  - [License](#license)
@@ -64,7 +64,7 @@ This function will open and return the serial port. By default, the serial port 
 
 This will set the pixel with index `pixel` to the colour `#RRGGBB` where `red`, `green` and `blue` are numbers in the range 0 to 253 (values 254 and 255 are reserved as control codes - best avoid them).
 
-### ArduinoLights::draw_pixle_map(pixels)
+### ArduinoLights::draw_pixel_map(pixels)
 
 This function takes an array of `[red, green, blue]` values - one for each pixel - and renders them to the device.
 
@@ -78,7 +78,7 @@ Pull requests are more than welcome! We have very low standards.
 
 ## License
 
-This code is licensed under the GNU GPLv3, a copy of which is included in this repository.
+This code is licensed under the [GNU GPLv3](https://www.gnu.org/licenses/gpl.txt), a [copy of which](LICENSE) is included in this repository.
 
 Copyright Arthur Taylor, 2017
 Copyright Edward McCaughan, 2017
