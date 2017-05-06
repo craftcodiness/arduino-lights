@@ -170,7 +170,7 @@ The `blemu` simulator is included in this repository and can be used to simulate
 python -m arduino_lights.blemu
 ```
 
-from the `arduino_lights` folder to start the simulator. The simulator will dynamically allocate a `PTY` device that can be used by your `arduino-lights` scripts to send LED data to the simulator. The `PTY` address will be printed to the console when the simulator starts.
+to start the simulator. The simulator will dynamically allocate a `PTY` device that can be used by your `arduino-lights` scripts to send LED data to the simulator. The `PTY` address will be printed to the console when the simulator starts.
 
 ## Maintainer
 
