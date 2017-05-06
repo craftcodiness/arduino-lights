@@ -1,4 +1,4 @@
-import serial
+import serial, time
 
 def serial_port():
   ser = serial.Serial(
