@@ -1,10 +1,20 @@
-import serial, time
+import serial, time, os, sys
+from stat import *
 
-def serial_port():
-  ser = serial.Serial(
-    port='/dev/ttyUSB0',
-    baudrate=115200
-  )
+def serial_port(file="/dev/ttyUSB0"):
+  if not os.path.exists(file):
+    print "File " + file + " does not exist. Cannot open serial port"
+    sys.exit(1)
+
+  mode = os.stat(file).st_mode
+  ser = None
+  if S_ISCHR(mode):
+    ser = serial.Serial(
+      port=file,
+      baudrate=115200
+    )
+  elif S_ISFIFO(mode):
+    ser = open(file, "w")
 
   # So! Apparently when you connect to the arduino serial port, the bootloader
   # kicks in, resets the arduino and waits a second for a new program to be loaded
@@ -20,6 +30,7 @@ def set_pixel(ser, x, y, red, green, blue):
   pixel = xy_to_pixel(x, y)
   control_string = bytearray([pixel,red,green,blue, 255])
   ser.write(control_string)
+  ser.flush()
 
 def end_frame(ser):
   control_string = bytearray([254])

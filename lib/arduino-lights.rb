@@ -5,9 +5,16 @@ module ArduinoLights
   SERIAL_RATE = 115200
   PIXELS = 24
 
-  def self.serial_port
+  def self.serial_port(file = SERIAL_PORT)
     @port ||= begin
-      res = SerialPort.new(SERIAL_PORT, SERIAL_RATE, 8, 1, SerialPort::NONE)
+      res = nil
+      if File.chardev?(file)
+        res = SerialPort.new(SERIAL_PORT, SERIAL_RATE, 8, 1, SerialPort::NONE)
+      elsif File.pipe?(file)
+        res = File.open(file, "w+")
+      else
+        raise "Unknown device type or device not accessible: #{file}"
+      end
       sleep(2)
       res
     end
@@ -33,6 +40,7 @@ module ArduinoLights
 
     # then end with a termination character
     self.serial_port.write(255.chr)  
+    self.serial_port.flush()
   end
 
   def self.radial_pixel_index(value, range)
