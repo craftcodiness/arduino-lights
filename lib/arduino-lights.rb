@@ -21,6 +21,21 @@ module ArduinoLights
     end
   end
 
+  def self.xy_to_pixel_number(x,y)
+    row_offset = y * 12
+    if(y % 2 == 0)
+      column_offset = (11 - x)
+    else
+      column_offset = x
+    end
+
+    row_offset + column_offset
+  end
+
+  def self.set_pixel_xy(x, y, red, green, blue)
+    self.set_pixel(self.xy_to_pixel_number(x, y), red, green, blue)
+  end
+
   def self.set_pixel(pixel, red, green, blue)
     # Something about the setup with these LEDs requires a small delay between bytes sent
     # I don't know if this is about the configuration of ruby-serialport, or the pixel 

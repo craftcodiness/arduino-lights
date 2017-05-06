@@ -18,6 +18,7 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
  - [API](#api)
    - [serial_port](#serial_portport--devttyusb0)
    - [set_pixel](#set_pixelpixel-red-green-blue)
+   - [set_pixel_xy](#set_pixel_xyx-y-red-green-blue)
    - [draw_pixel_map](#draw_pixel_mappixels)
    - [end_frame](#end_frame)
  - [Simulator](#simulator)
@@ -138,6 +139,10 @@ export BLEMU_DEVICE=/dev/pts/7
 ### set_pixel(pixel, red, green, blue)
 
 This will set the pixel with index `pixel` to the colour `#RRGGBB` where `red`, `green` and `blue` are numbers in the range 0 to 253 (values 254 and 255 are reserved as control codes - best avoid them).
+
+### set_pixel_xy(x, y, red, green, blue)
+
+For the 12x12 matrix display, this will set the pixel at `x,y` to the colour `#RRGGBB` where `x` and `y` are integers between 0 and 11, and `red`, `green` and `blue` are numbers in the range 0 to 253 (values 254 and 255 are reserved as control codes - best avoid them).
 
 ### draw_pixel_map(pixels)
 
