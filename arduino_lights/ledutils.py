@@ -59,9 +59,9 @@ def xy_to_pixel(x, y):
 
 
 def pixel_to_xy(pixel):
-  col = pixel % LED_SIZE.w
-  row = pixel / LED_SIZE.w
-  if row % 2 == 0:
+  x = pixel % LED_SIZE.w
+  y = pixel / LED_SIZE.w
+  if y % 2 == 0:
     # flip every second row, because hardware!
-    col = LED_SIZE.w - 1 - col
-  return row, col
+    x = LED_SIZE.w - 1 - x
+  return x, y
