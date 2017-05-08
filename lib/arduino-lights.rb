@@ -5,7 +5,7 @@ module ArduinoLights
   SERIAL_RATE = 115200
   PIXELS = 24
 
-  def self.serial_port(file = SERIAL_PORT)
+  def self.connect(file = SERIAL_PORT)
     file = ENV.fetch("BLEMU_DEVICE", file)
     @port ||= begin
       res = nil
@@ -38,7 +38,7 @@ module ArduinoLights
 
   def self.set_pixel(pixel, red, green, blue)
     # Something about the setup with these LEDs requires a small delay between bytes sent
-    # I don't know if this is about the configuration of ruby-serialport, or the pixel 
+    # I don't know if this is about the configuration of ruby-serialport, or the pixel
     # processing code on the Arduino itself.
     #
     # With this set to 0.0009, data runs through the device at about 5kb/s. With this set
@@ -46,22 +46,22 @@ module ArduinoLights
     sleep(0.0009)
 
     # first byte is whice led number to switch on
-    self.serial_port.write(pixel.chr)     
+    self.connect.write(pixel.chr)
 
     # next 3 bytes are red, green and blue values
     # Note: 255 signifies the end of the command, so don't try and set an led value to that
-    self.serial_port.write(red.chr)    
-    self.serial_port.write(green.chr)    
-    self.serial_port.write(blue.chr)
+    self.connect.write(red.chr)
+    self.connect.write(green.chr)
+    self.connect.write(blue.chr)
 
     # then end with a termination character
-    self.serial_port.write(255.chr)  
-    self.serial_port.flush()
+    self.connect.write(255.chr)
+    self.connect.flush()
   end
 
   def self.end_frame()
-    self.serial_port.write(254.chr)
-    self.serial_port.flush()
+    self.connect.write(254.chr)
+    self.connect.flush()
   end
 
   def self.radial_pixel_index(value, range)

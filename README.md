@@ -90,7 +90,7 @@ end
 
 ```
 
-Note that the LED ring does not explicitly require `ArduinoLights::draw_screen` to be called to render the pixles, but the LED matrix will do before any changes can be seen. 
+Note that the LED ring does not explicitly require `ArduinoLights::draw_screen` to be called to render the pixles, but the LED matrix will do before any changes can be seen.
 
 ### Usage Python
 
@@ -124,7 +124,7 @@ The APIs for Ruby and Python are similar. Note that for the Python library, the 
 
 The Ruby library will automatically open the serial port when the first pixel data needs to be sent. For the Python library, the serial port must be opened explicitly and a reference to the port retained for future API calls.
 
-### serial_port(port = '/dev/ttyUSB0')
+### connect(port = '/dev/ttyUSB0')
 
 This function will open and return the serial port. By default, the serial port is expected to be at `/dev/ttyUSB0`. The port will be configured for 115200 baud (8N1). You can change the target port by passing the path as the argument to this function. For the Ruby library, it is not always necessary to call this function directly - it will implicitly be called by the pixel drawing routines with default values.
 
@@ -154,13 +154,13 @@ This function sends the control code to render the current buffer to the screen 
 
 ## Simulator
 
-If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim) (NCurses-based simulator written in Ruby) or [blemu](arduino_lights/blemu.py) (SDL-based simulator written in Python). 
+If you want to develop programs using this library, but without the hardware available, you can check out the [blinky-sim](https://github.com/craftcodiness/blinky-sim) (NCurses-based simulator written in Ruby) or [blemu](arduino_lights/blemu.py) (SDL-based simulator written in Python).
 
 When running with either simulator, you may wish to set the `BLEMU_DEVICE` variable in your environment to connect your `arduino-lights` scripts to the simulator rather than the serial port:
 
 ```
 export BLEMU_DEVICE=/dev/pty/7
-```  
+```
 
 ### Running blemu
 

@@ -1,3 +1,10 @@
+'''
+An emulator for the blinkenbox, so that developing cool, tasty
+effects doesn't need the hardware.
+
+Because Windows is a biatch when it comes to anything terminal related,
+this will only work on Unix-y systems.
+'''
 import os
 import pty
 import logging
@@ -5,13 +12,7 @@ import argparse
 import pygame
 from pygame import Rect, Color
 
-from ledutils import Size, LED_SIZE, pixel_to_xy
-
-# A emulator for the blinkenbox, so that developing cool, tasty
-# effects doesn't need the hardware.
-#
-# Because Windows is a biatch when it comes to anything terminal related,
-# this will only work on Unix-y systems.
+from controller import Size, LED_SIZE, pixel_to_xy
 
 
 SCREEN_SIZE = Size(600, 600)
@@ -39,7 +40,7 @@ def show():
 
 def process_command(frame):
     if len(frame) != 4:
-        logging.error('Broken frame, wrong length!', len(frame))
+        logging.error('Broken frame! Wrong length: %d', len(frame))
     pixel, red, green, blue = frame
     logging.debug('Set pixel %d to (%d, %d, %d)', pixel, red, green, blue)
     draw_pixel(pixel, Color(red, green, blue))

@@ -1,13 +1,17 @@
 from distutils.core import setup
 setup(
-  name = 'arduino_lights',
-  packages = ['arduino_lights'],
-  version = '0.6.2',
-  description = 'Control LED lights via Arduino',
-  author = 'Arthur Taylor',
-  author_email = 'arthur.taylor@gmail.com',
-  url = 'https://github.com/craftcodiness/arduino-lights',
-  download_url = 'https://github.com/craftcodiness/arduino-lights/archive/0.6.2.tar.gz',
-  keywords = ['led', 'serial', 'arduino'],
-  classifiers = [],
+    name = 'arduino_lights',
+    packages = ['arduino_lights'],
+    version = '0.7.0',
+    description = 'Control LED lights via Arduino',
+    author = 'Arthur Taylor',
+    author_email = 'arthur.taylor@gmail.com',
+    url = 'https://github.com/craftcodiness/arduino-lights',
+    download_url = 'https://github.com/craftcodiness/arduino-lights/archive/0.7.0.tar.gz',
+    keywords = ['led', 'serial', 'arduino'],
+    classifiers = [],
+    install_requires=[
+        'pyserial',
+        'pygame'
+    ]
 )
