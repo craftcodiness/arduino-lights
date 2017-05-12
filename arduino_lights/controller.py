@@ -48,6 +48,16 @@ def end_frame(ser):
     ser.write(control_string)
 
 
+def draw_pixel_map(ser, pixels, autoend=True):
+    '''Utility to draw a dict of (x,y) tuples to (r,g,b) tuples.
+    If autoend is true, calls end_frame before returning.'''
+    for i in xrange(LED_SIZE.w):
+        for j in xrange(LED_SIZE.h):
+            set_pixel(ser, (i, j), *pixels[i, j])
+    if autoend:
+        end_frame(ser)
+
+
 def xy_to_pixel(x, y):
     row_offset = y * LED_SIZE.w
     if y % 2 == 0:
