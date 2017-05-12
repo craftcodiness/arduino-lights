@@ -16,7 +16,7 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
    - [Python Install](#python-install)
  - [Usage](#usage)
  - [API](#api)
-   - [serial_port](#serial_portport--devttyusb0)
+   - [connect](#connectport--devttyusb0)
    - [set_pixel](#set_pixelpixel-red-green-blue)
    - [set_pixel_xy](#set_pixel_xyx-y-red-green-blue)
    - [draw_pixel_map](#draw_pixel_mappixels)
