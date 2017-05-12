@@ -29,11 +29,15 @@ def connect(file="/dev/ttyUSB0"):
     return ser
 
 
-def set_pixel(ser, x, y, red, green, blue):
+def set_pixel(ser, coord, red, green, blue):
+    '''Set the pixel addressed by coord to the given color triplet.
+    If coord is a tuple, it will be interpreted as x, y coordinates.
+    If it is an integer it's interpreted as a linear pixel address.
+    '''
     red = min(red, 253)
     green = min(green, 253)
     blue = min(blue, 253)
-    pixel = xy_to_pixel(x, y)
+    pixel = xy_to_pixel(*coord) if isinstance(coord, tuple) else coord
     control_string = bytearray([pixel, red, green, blue, 255])
     ser.write(control_string)
     ser.flush()
