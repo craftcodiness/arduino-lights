@@ -38,6 +38,8 @@ def set_pixel(ser, coord, red, green, blue):
     green = min(green, 253)
     blue = min(blue, 253)
     pixel = xy_to_pixel(*coord) if isinstance(coord, tuple) else coord
+    if pixel > 253:
+        raise ValueError('Pixel number out of range')
     control_string = bytearray([pixel, red, green, blue, 255])
     ser.write(control_string)
     ser.flush()

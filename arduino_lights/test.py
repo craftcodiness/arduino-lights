@@ -15,8 +15,8 @@ if __name__ == '__main__':
     with controller.connect(args.dev) as con:
         for x in range(LED_SIZE.w):
             for y in range(LED_SIZE.h):
-                controller.set_pixel(con, x, y,
-                                   colorize(x, LED_SIZE.h),
-                                   colorize(y, LED_SIZE.w),
-                                   colorize(x * y, LED_COUNT))
+                controller.set_pixel(con, (x, y),
+                                     colorize(x, LED_SIZE.h),
+                                     colorize(y, LED_SIZE.w),
+                                     colorize(x * y, LED_COUNT))
         controller.end_frame(con)
