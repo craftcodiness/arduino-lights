@@ -37,7 +37,7 @@ Today, this supports two devices - the LED ring, and the LED matrix. Both have s
 
 To install this library in Ruby, add this gem to your Gemfile:
 
-```
+```ruby
 source "https://rubygems.org"
 
 gem "arduino-lights"
@@ -45,7 +45,7 @@ gem "arduino-lights"
 
 If you are modifying this Gem, update the version information in `arduino-lights.gemspec` and build a new version using `gem`:
 
-```
+```shell
 gem build arduino-lights.gemspec
 gem push arduino-lights-<VERSION>.gem
 ```
@@ -56,13 +56,13 @@ N.B. You will need an appropriate rubygems API key to be able to push the packag
 
 To install this library in Python, fetch it from PyPI:
 
-```
+```shell
 pip install arduino_lights
 ```
 
 If you are modifying the library, update the version information and download URL in `setup.py` and push a new version with `setup.py`:
 
-```
+```shell
 python setup.py sdist upload -r arduino_lights
 git tag <VERSION> -m "Your comment"
 git push --tags origin master
@@ -77,7 +77,7 @@ N.B. You will need appropriate entries in your `~/.pypirc`, including a valid us
 
 From your ruby script, simply import `arduino-lights`. You can then write simple code to drive the LEDs. For example, for the LED ring:
 
-```
+```ruby
 require 'arduino-lights'
 
 pixel = 0
@@ -94,26 +94,26 @@ Note that the LED ring does not explicitly require `ArduinoLights::draw_screen` 
 
 ### Usage Python
 
-From your python script, simply import `ledutils` from the `arduino_lights` package:
+From your python script, simply import the `arduino_lights` package:
 
-```
+```python
 import time
-from arduino_lights import ledutils
+import arduino_lights al
 
-ser = ledutils.serial_port()
+bl = al.connect()
 
 x = 0
 y = 0
 first = True
-while(True):
+while True:
   if not first:
-    ledutils.set_pixel(ser, x, y, 0, 0, 0)
+    al.set_pixel(ser, (x, y), 0, 0, 0)
   first = False
   x = (x + 1) % 12
   if x == 0:
     y = (y + 1) % 12
-  ledutils.set_pixel(ser, x, y, 0, 255, 0)
-  ledutils.end_frame(ser)
+  al.set_pixel(ser, (x, y), 0, 255, 0)
+  al.end_frame(ser)
   time.sleep(0.05)
 
 ```
@@ -132,7 +132,7 @@ For testing purposes, you can pass a path to a named pipe as the port address. I
 
 The default serial port can also be overridden by setting the `BLEMU_DEVICE` environment variable:
 
-```
+```shell
 export BLEMU_DEVICE=/dev/pts/7
 ```
 
@@ -158,7 +158,7 @@ If you want to develop programs using this library, but without the hardware ava
 
 When running with either simulator, you may wish to set the `BLEMU_DEVICE` variable in your environment to connect your `arduino-lights` scripts to the simulator rather than the serial port:
 
-```
+```shell
 export BLEMU_DEVICE=/dev/pty/7
 ```
 
@@ -166,7 +166,7 @@ export BLEMU_DEVICE=/dev/pty/7
 
 The `blemu` simulator is included in this repository and can be used to simulate rendering to real hardware. `blemu` depends on `python-pygame` which requires `SDL`. Once you have installed those dependencies and this library, simply run:
 
-```
+```shell
 python -m arduino_lights.blemu
 ```
 
