@@ -98,7 +98,7 @@ From your python script, simply import the `arduino_lights` package:
 
 ```python
 import time
-import arduino_lights al
+import arduino_lights as al
 
 bl = al.connect()
 
