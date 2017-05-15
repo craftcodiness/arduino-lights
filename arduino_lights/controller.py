@@ -1,7 +1,6 @@
 import serial
 import time
 import os
-import sys
 from collections import namedtuple
 from stat import S_ISCHR, S_ISFIFO
 
@@ -9,6 +8,7 @@ Size = namedtuple('Size', 'w h')
 LED_SIZE = Size(12, 12)
 LED_COUNT = LED_SIZE.w * LED_SIZE.h
 BAUD_RATE = 115200
+
 
 def connect(file="/dev/ttyUSB0"):
     file = os.getenv("BLEMU_DEVICE", file)
@@ -56,6 +56,15 @@ def draw_pixel_map(ser, pixels, autoend=True):
     for i in xrange(LED_SIZE.w):
         for j in xrange(LED_SIZE.h):
             set_pixel(ser, (i, j), *pixels[i, j])
+    if autoend:
+        end_frame(ser)
+
+
+def clear(ser, red=0, green=0, blue=0, autoend=True):
+    '''Utility to clear the screen/fill it with one color'''
+    for i in xrange(LED_SIZE.w):
+        for j in xrange(LED_SIZE.h):
+            set_pixel(ser, (i, j), red, green, blue)
     if autoend:
         end_frame(ser)
 
