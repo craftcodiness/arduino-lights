@@ -8,6 +8,7 @@ import sys
 Size = namedtuple('Size', 'w h')
 LED_SIZE = Size(12, 12)
 LED_COUNT = LED_SIZE.w * LED_SIZE.h
+RING_SIZE = 24
 BAUD_RATE = 115200
 if sys.platform == 'darwin':
     DEFAULT_DEVICE = "/dev/tty.wchusbserial1410"
@@ -70,11 +71,19 @@ class Controller(object):
 class Ring(Controller):
     def __init__(self, device=DEFAULT_DEVICE, delay=DEFAULT_RING_DELAY):
         super(Ring, self).__init__(device, delay)
+        self.size = RING_SIZE
+
+    def clear(self, red=0, green=0, blue=0, autoend=True):
+        for i in range(0, RING_SIZE):
+            self.set_pixel(i, red, green, blue)
+        if autoend:
+            self.end_frame()
 
 
 class Matrix(Controller):
     def __init__(self, device=DEFAULT_DEVICE, delay=DEFAULT_MATRIX_DELAY):
         super(Matrix, self).__init__(device, delay)
+        self.size = LED_SIZE
 
 
 def connect(device=DEFAULT_DEVICE):
