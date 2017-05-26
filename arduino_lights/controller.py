@@ -2,7 +2,7 @@ import serial
 import time
 import os
 from collections import namedtuple
-from stat import S_ISCHR, S_ISFIFO
+from stat import S_ISCHR, S_ISFIFO, S_ISREG
 
 Size = namedtuple('Size', 'w h')
 LED_SIZE = Size(12, 12)
@@ -41,7 +41,7 @@ def connect(file="/dev/ttyUSB0"):
     ser = None
     if S_ISCHR(mode):
         ser = serial.Serial(port=file, baudrate=BAUD_RATE)
-    elif S_ISFIFO(mode):
+    elif S_ISFIFO(mode) or S_ISREG(mode):
         ser = open(file, "w")
 
     # So! Apparently when you connect to the arduino serial port, the
