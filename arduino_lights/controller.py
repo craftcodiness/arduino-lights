@@ -3,11 +3,19 @@ import time
 import os
 from collections import namedtuple
 from stat import S_ISCHR, S_ISFIFO, S_ISREG
+import sys
 
 Size = namedtuple('Size', 'w h')
 LED_SIZE = Size(12, 12)
 LED_COUNT = LED_SIZE.w * LED_SIZE.h
+RING_SIZE = 24
 BAUD_RATE = 115200
+if sys.platform == 'darwin':
+    DEFAULT_DEVICE = "/dev/tty.wchusbserial1410"
+else:
+    DEFAULT_DEVICE = "/dev/ttyUSB0"
+DEFAULT_MATRIX_DELAY = 0
+DEFAULT_RING_DELAY = 0.001
 
 
 #The WS2801 has a nonlinear brightness curve, so we need to compensate
@@ -32,17 +40,63 @@ gammaCorrection = [
   215,218,220,223,225,228,231,233,236,239,241,244,247,249,252,255 ]
 
 
-def connect(file="/dev/ttyUSB0"):
-    file = os.getenv("BLEMU_DEVICE", file)
-    if not os.path.exists(file):
-        raise ValueError("Device `%s` does not exist. Cannot connect" % file)
 
-    mode = os.stat(file).st_mode
+class Controller(object):
+    def __init__(self, device, delay):
+        self.ser = connect(device)
+        self.delay = delay
+
+    def pause(self):
+        if self.delay == 0:
+            return
+        time.sleep(self.delay)
+
+    def set_pixel(self, *args, **vargs):
+        set_pixel(self.ser, *args, **vargs)
+        self.pause()
+
+    def draw_pixel_map(self, *args, **vargs):
+        draw_pixel_map(self.ser, *args, **vargs)
+        self.pause()
+
+    def end_frame(self):
+        end_frame(self.ser)
+        self.pause()
+
+    def clear(self, red=0, green=0, blue=0, autoend=True):
+        clear(self.ser, red=red, green=green, blue=blue, autoend=autoend)
+        self.pause()
+
+
+class Ring(Controller):
+    def __init__(self, device=DEFAULT_DEVICE, delay=DEFAULT_RING_DELAY):
+        super(Ring, self).__init__(device, delay)
+        self.size = RING_SIZE
+
+    def clear(self, red=0, green=0, blue=0, autoend=True):
+        for i in range(0, RING_SIZE):
+            self.set_pixel(i, red, green, blue)
+        if autoend:
+            self.end_frame()
+
+
+class Matrix(Controller):
+    def __init__(self, device=DEFAULT_DEVICE, delay=DEFAULT_MATRIX_DELAY):
+        super(Matrix, self).__init__(device, delay)
+        self.size = LED_SIZE
+
+
+def connect(device=DEFAULT_DEVICE):
+    device = os.getenv("BLEMU_DEVICE", device)
+    if not os.path.exists(device):
+        raise ValueError("Device `%s` does not exist. Cannot connect" % device)
+
+    mode = os.stat(device).st_mode
     ser = None
     if S_ISCHR(mode):
-        ser = serial.Serial(port=file, baudrate=BAUD_RATE)
+        ser = serial.Serial(port=device, baudrate=BAUD_RATE)
     elif S_ISFIFO(mode) or S_ISREG(mode):
-        ser = open(file, "w")
+        ser = open(device, "w")
 
     # So! Apparently when you connect to the arduino serial port, the
     # bootloader kicks in, resets the arduino and waits a second for a new
