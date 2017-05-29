@@ -2,3 +2,4 @@
 *.gem
 MANIFEST
 dist
+*.egg-info
